@@ -262,6 +262,7 @@ function initTimer() {
     const musicToggle = document.getElementById('musicToggle');
     const volumeControl = document.getElementById('volumeControl');
     const volumeLabel = document.getElementById('volumeLabel');
+    const openMusicBtn = document.getElementById('openMusicLink');
 
     // Initialize audio
     initAudio();
@@ -281,12 +282,17 @@ function initTimer() {
     resetBtn.addEventListener('click', resetTimer);
 
     musicToggle.addEventListener('change', toggleMusic);
+    
     volumeControl.addEventListener('input', (e) => {
         const volume = e.target.value;
         volumeLabel.textContent = volume + '%';
         if (backgroundMusic) {
             backgroundMusic.volume = volume / 100;
         }
+    });
+
+    openMusicBtn.addEventListener('click', () => {
+        window.open('https://www.youtube.com/watch?v=jfKfPfyJRdk', '_blank', 'width=400,height=300');
     });
 
     updateTimerDisplay();
@@ -299,121 +305,22 @@ function initTimer() {
 }
 
 function initAudio() {
-    // Create calming background music using Web Audio API
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (AudioContext) {
-        const audioContext = new AudioContext();
+    // Use HTML5 audio element for background music
+    backgroundMusic = document.getElementById('backgroundAudio');
+    
+    if (backgroundMusic) {
+        backgroundMusic.volume = 0.3; // Set initial volume
         
-        backgroundMusic = {
-            context: audioContext,
-            oscillators: [],
-            gainNodes: [],
-            masterGain: null,
-            isPlaying: false,
-            _volume: 0.5,
-            
-            play: function() {
-                if (this.isPlaying) return;
-                
-                // Resume audio context if suspended
-                if (this.context.state === 'suspended') {
-                    this.context.resume();
-                }
-                
-                // Create master gain for volume control
-                this.masterGain = this.context.createGain();
-                this.masterGain.gain.setValueAtTime(this._volume * 0.15, this.context.currentTime);
-                this.masterGain.connect(this.context.destination);
-                
-                // Create multiple oscillators for a rich, calming ambient sound
-                const frequencies = [
-                    { freq: 174, detune: 0 },    // Root note (low)
-                    { freq: 261.63, detune: 0 }, // C note (middle)
-                    { freq: 329.63, detune: 2 }, // E note (harmony)
-                    { freq: 392, detune: -2 }    // G note (harmony)
-                ];
-                
-                frequencies.forEach((note, index) => {
-                    const oscillator = this.context.createOscillator();
-                    const gainNode = this.context.createGain();
-                    
-                    // Use sine wave for smooth, calming tone
-                    oscillator.type = 'sine';
-                    oscillator.frequency.setValueAtTime(note.freq, this.context.currentTime);
-                    oscillator.detune.setValueAtTime(note.detune, this.context.currentTime);
-                    
-                    // Set individual volumes for each note
-                    const volumes = [0.3, 0.5, 0.4, 0.35];
-                    gainNode.gain.setValueAtTime(volumes[index], this.context.currentTime);
-                    
-                    // Add subtle LFO (Low Frequency Oscillator) for gentle modulation
-                    const lfo = this.context.createOscillator();
-                    const lfoGain = this.context.createGain();
-                    lfo.frequency.setValueAtTime(0.2 + (index * 0.1), this.context.currentTime);
-                    lfoGain.gain.setValueAtTime(1.5, this.context.currentTime);
-                    
-                    lfo.connect(lfoGain);
-                    lfoGain.connect(oscillator.frequency);
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(this.masterGain);
-                    
-                    oscillator.start();
-                    lfo.start();
-                    
-                    this.oscillators.push(oscillator);
-                    this.oscillators.push(lfo);
-                    this.gainNodes.push(gainNode);
-                });
-                
-                this.isPlaying = true;
-            },
-            
-            stop: function() {
-                if (!this.isPlaying) return;
-                
-                this.oscillators.forEach(osc => {
-                    try {
-                        osc.stop();
-                        osc.disconnect();
-                    } catch (e) {
-                        // Ignore errors if already stopped
-                    }
-                });
-                
-                this.gainNodes.forEach(gain => {
-                    try {
-                        gain.disconnect();
-                    } catch (e) {
-                        // Ignore errors
-                    }
-                });
-                
-                if (this.masterGain) {
-                    try {
-                        this.masterGain.disconnect();
-                    } catch (e) {
-                        // Ignore errors
-                    }
-                }
-                
-                this.oscillators = [];
-                this.gainNodes = [];
-                this.masterGain = null;
-                this.isPlaying = false;
-            },
-            
-            set volume(val) {
-                this._volume = val;
-                if (this.masterGain) {
-                    this.masterGain.gain.setValueAtTime(val * 0.15, this.context.currentTime);
-                }
-            },
-            
-            get volume() {
-                return this._volume;
-            }
-        };
+        // Handle audio loading errors gracefully
+        backgroundMusic.addEventListener('error', function(e) {
+            console.log('Audio file could not be loaded from music folder');
+            alert('Background music file not found. Please make sure "unreal(liz solo).mp3" is in the music folder.');
+        });
+        
+        // Log when audio is ready
+        backgroundMusic.addEventListener('canplaythrough', function() {
+            console.log('Background music loaded successfully');
+        });
     }
     
     // Create alarm sound using Web Audio API
@@ -464,14 +371,14 @@ function setCustomTime() {
 }
 
 function toggleMusic(e) {
+    if (!backgroundMusic) return;
+    
     if (e.target.checked && isRunning) {
-        if (backgroundMusic) {
-            backgroundMusic.play();
-        }
+        backgroundMusic.play().catch(err => {
+            console.log('Audio playback failed:', err);
+        });
     } else {
-        if (backgroundMusic) {
-            backgroundMusic.stop();
-        }
+        backgroundMusic.pause();
     }
 }
 
@@ -482,7 +389,9 @@ function startTimer() {
         // Start music if toggle is on
         const musicToggle = document.getElementById('musicToggle');
         if (musicToggle.checked && backgroundMusic) {
-            backgroundMusic.play();
+            backgroundMusic.play().catch(err => {
+                console.log('Audio playback failed:', err);
+            });
         }
         
         timerInterval = setInterval(() => {
@@ -504,9 +413,9 @@ function pauseTimer() {
     isRunning = false;
     clearInterval(timerInterval);
     
-    // Stop music
+    // Pause music
     if (backgroundMusic) {
-        backgroundMusic.stop();
+        backgroundMusic.pause();
     }
 }
 

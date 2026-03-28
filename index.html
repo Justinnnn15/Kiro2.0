@@ -166,9 +166,17 @@
                             <input type="checkbox" id="musicToggle">
                             <span>🎵 Background Music</span>
                         </label>
-                        <input type="range" id="volumeControl" min="0" max="100" value="50" class="volume-slider">
-                        <span id="volumeLabel">50%</span>
+                        <button id="openMusicLink" class="btn-music-link">Open Lofi Music 🎧</button>
+                        <div class="volume-control-group">
+                            <input type="range" id="volumeControl" min="0" max="100" value="30" class="volume-slider">
+                            <span id="volumeLabel">30%</span>
+                        </div>
                     </div>
+                    <audio id="backgroundAudio" loop>
+                        <source src="music/unreal(liz solo).mp3" type="audio/mpeg">
+                        <source src="music/unreal(liz solo).ogg" type="audio/ogg">
+                        Your browser does not support the audio element.
+                    </audio>
                     <div class="study-stats">
                         <p>Today's Study Time: <span id="dailyHours">0h 0m</span></p>
                     </div>
