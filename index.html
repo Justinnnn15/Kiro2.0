@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Study Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-card">
+            <h1>📚 Study Dashboard</h1>
+            <p class="subtitle">Your personal study companion</p>
+            <form id="loginForm">
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="Username" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Password" required>
+                </div>
+                <div class="error-message" id="loginError"></div>
+                <button type="submit" class="btn-primary">Login</button>
+                <p class="hint">Hint: admin / admin123</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Menu -->
+    <div id="mainMenu" class="main-menu hidden">
+        <div class="menu-header">
+            <h1>📚 Study Dashboard</h1>
+            <button id="menuLogoutBtn" class="btn-logout">Logout</button>
+        </div>
+        <div class="menu-container">
+            <h2>Choose a Feature</h2>
+            <div class="menu-grid">
+                <div class="menu-card" data-feature="assignments">
+                    <div class="menu-icon">📝</div>
+                    <h3>Assignment Tracker</h3>
+                    <p>Manage your assignments and deadlines</p>
+                </div>
+                <div class="menu-card" data-feature="timer">
+                    <div class="menu-icon">⏱️</div>
+                    <h3>Focus Timer</h3>
+                    <p>Track your study sessions with Pomodoro</p>
+                </div>
+                <div class="menu-card" data-feature="gpa">
+                    <div class="menu-icon">🎓</div>
+                    <h3>GPA Calculator</h3>
+                    <p>Calculate and track your GPA</p>
+                </div>
+                <div class="menu-card" data-feature="notes">
+                    <div class="menu-icon">📋</div>
+                    <h3>Quick Notes</h3>
+                    <p>Jot down important thoughts</p>
+                </div>
+                <div class="menu-card" data-feature="motivation">
+                    <div class="menu-icon">🌟</div>
+                    <h3>Daily Motivation</h3>
+                    <p>Get inspired with daily quotes</p>
+                </div>
+                <div class="menu-card" data-feature="calculator">
+                    <div class="menu-icon">🔢</div>
+                    <h3>Calculator</h3>
+                    <p>Quick calculations for your studies</p>
+                </div>
+                <div class="menu-card" data-feature="all">
+                    <div class="menu-icon">🎯</div>
+                    <h3>All Features</h3>
+                    <p>Access the complete dashboard</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="dashboard hidden">
+        <header class="dashboard-header">
+            <button id="backToMenu" class="btn-back">← Back to Menu</button>
+            <h1 id="dashboardTitle">📚 Study Dashboard</h1>
+            <button id="logoutBtn" class="btn-logout">Logout</button>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Left Column -->
+            <div class="column">
+                <!-- Assignment Tracker -->
+                <div class="card">
+                    <h2>📝 Assignments</h2>
+                    <div class="assignment-form">
+                        <input type="text" id="assignmentSubject" placeholder="Subject">
+                        <input type="date" id="assignmentDate">
+                        <select id="assignmentPriority">
+                            <option value="low">Low Priority</option>
+                            <option value="medium">Medium Priority</option>
+                            <option value="high">High Priority</option>
+                        </select>
+                        <button id="addAssignment" class="btn-primary">Add</button>
+                    </div>
+                    <div class="filter-controls">
+                        <select id="filterPriority">
+                            <option value="all">All Priorities</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                        <select id="sortBy">
+                            <option value="date">Sort by Date</option>
+                            <option value="priority">Sort by Priority</option>
+                        </select>
+                    </div>
+                    <div id="assignmentList" class="assignment-list"></div>
+                </div>
+
+                <!-- Grade Calculator -->
+                <div class="card">
+                    <h2>🎓 GPA Calculator</h2>
+                    <div class="gpa-form">
+                        <input type="text" id="courseName" placeholder="Course Name">
+                        <select id="courseGrade">
+                            <option value="4.0">A (4.0)</option>
+                            <option value="3.7">A- (3.7)</option>
+                            <option value="3.3">B+ (3.3)</option>
+                            <option value="3.0">B (3.0)</option>
+                            <option value="2.7">B- (2.7)</option>
+                            <option value="2.3">C+ (2.3)</option>
+                            <option value="2.0">C (2.0)</option>
+                            <option value="1.7">C- (1.7)</option>
+                            <option value="1.0">D (1.0)</option>
+                            <option value="0.0">F (0.0)</option>
+                        </select>
+                        <input type="number" id="courseUnits" placeholder="Units" min="1" max="6" value="3">
+                        <button id="addCourse" class="btn-primary">Add Course</button>
+                    </div>
+                    <div class="gpa-display">
+                        <h3>Current GPA: <span id="currentGPA">0.00</span></h3>
+                    </div>
+                    <div id="courseList" class="course-list"></div>
+                </div>
+            </div>
+
+            <!-- Middle Column -->
+            <div class="column">
+                <!-- Study Timer -->
+                <div class="card">
+                    <h2>⏱️ Focus Timer</h2>
+                    <div class="timer-display" id="timerDisplay">25:00</div>
+                    <div class="timer-presets">
+                        <button class="preset-btn" data-minutes="25">25 min</button>
+                        <button class="preset-btn" data-minutes="45">45 min</button>
+                        <button class="preset-btn" data-minutes="60">60 min</button>
+                    </div>
+                    <div class="timer-controls">
+                        <button id="startTimer" class="btn-primary">Start</button>
+                        <button id="pauseTimer" class="btn-secondary">Pause</button>
+                        <button id="resetTimer" class="btn-secondary">Reset</button>
+                    </div>
+                    <div class="study-stats">
+                        <p>Today's Study Time: <span id="dailyHours">0h 0m</span></p>
+                    </div>
+                </div>
+
+                <!-- Quick Notes -->
+                <div class="card">
+                    <h2>📋 Quick Notes</h2>
+                    <textarea id="quickNotes" placeholder="Jot down quick thoughts..."></textarea>
+                    <button id="saveNotes" class="btn-primary">Save Notes</button>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="column">
+                <!-- Quick Tools -->
+                <div class="card">
+                    <h2>🌟 Daily Motivation</h2>
+                    <div class="date-display" id="dateDisplay"></div>
+                    <div class="quote-display" id="quoteDisplay"></div>
+                </div>
+
+                <!-- Calculator -->
+                <div class="card">
+                    <h2>🔢 Calculator</h2>
+                    <div class="calculator">
+                        <input type="text" id="calcDisplay" readonly>
+                        <div class="calc-buttons">
+                            <button class="calc-btn" data-value="7">7</button>
+                            <button class="calc-btn" data-value="8">8</button>
+                            <button class="calc-btn" data-value="9">9</button>
+                            <button class="calc-btn operator" data-value="/">÷</button>
+                            <button class="calc-btn" data-value="4">4</button>
+                            <button class="calc-btn" data-value="5">5</button>
+                            <button class="calc-btn" data-value="6">6</button>
+                            <button class="calc-btn operator" data-value="*">×</button>
+                            <button class="calc-btn" data-value="1">1</button>
+                            <button class="calc-btn" data-value="2">2</button>
+                            <button class="calc-btn" data-value="3">3</button>
+                            <button class="calc-btn operator" data-value="-">−</button>
+                            <button class="calc-btn" data-value="0">0</button>
+                            <button class="calc-btn" data-value=".">.</button>
+                            <button class="calc-btn operator" data-value="=">=</button>
+                            <button class="calc-btn operator" data-value="+">+</button>
+                            <button class="calc-btn clear" data-value="C">C</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

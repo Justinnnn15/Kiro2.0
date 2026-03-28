@@ -1,0 +1,456 @@
+// Authentication
+const CREDENTIALS = { username: 'admin', password: 'admin123' };
+
+// DOM Elements
+const loginScreen = document.getElementById('loginScreen');
+const mainMenu = document.getElementById('mainMenu');
+const dashboard = document.getElementById('dashboard');
+const loginForm = document.getElementById('loginForm');
+const loginError = document.getElementById('loginError');
+const logoutBtn = document.getElementById('logoutBtn');
+const menuLogoutBtn = document.getElementById('menuLogoutBtn');
+const backToMenuBtn = document.getElementById('backToMenu');
+const menuCards = document.querySelectorAll('.menu-card');
+const dashboardTitle = document.getElementById('dashboardTitle');
+
+// Check login state on load
+window.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+        showMainMenu();
+    }
+    loadAllData();
+    initializeApp();
+    initMenuNavigation();
+});
+
+// Login
+loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    if (username === CREDENTIALS.username && password === CREDENTIALS.password) {
+        localStorage.setItem('isLoggedIn', 'true');
+        loginError.textContent = '';
+        showMainMenu();
+    } else {
+        loginError.textContent = 'Invalid username or password';
+    }
+});
+
+// Logout
+logoutBtn.addEventListener('click', () => {
+    localStorage.setItem('isLoggedIn', 'false');
+    loginScreen.classList.remove('hidden');
+    dashboard.classList.add('hidden');
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+});
+
+function showDashboard() {
+    loginScreen.classList.add('hidden');
+    dashboard.classList.remove('hidden');
+}
+
+// Initialize App
+function initializeApp() {
+    initAssignments();
+    initTimer();
+    initGPA();
+    initQuickTools();
+    initCalculator();
+    initNotes();
+}
+
+// Assignment Tracker
+let assignments = [];
+
+function initAssignments() {
+    const addBtn = document.getElementById('addAssignment');
+    const filterPriority = document.getElementById('filterPriority');
+    const sortBy = document.getElementById('sortBy');
+
+    addBtn.addEventListener('click', addAssignment);
+    filterPriority.addEventListener('change', renderAssignments);
+    sortBy.addEventListener('change', renderAssignments);
+
+    renderAssignments();
+}
+
+function addAssignment() {
+    const subject = document.getElementById('assignmentSubject').value;
+    const date = document.getElementById('assignmentDate').value;
+    const priority = document.getElementById('assignmentPriority').value;
+
+    if (!subject || !date) {
+        alert('Please fill in all fields');
+        return;
+    }
+
+    assignments.push({
+        id: Date.now(),
+        subject,
+        date,
+        priority,
+        completed: false
+    });
+
+    saveAssignments();
+    renderAssignments();
+
+    document.getElementById('assignmentSubject').value = '';
+    document.getElementById('assignmentDate').value = '';
+}
+
+function renderAssignments() {
+    const list = document.getElementById('assignmentList');
+    const filterValue = document.getElementById('filterPriority').value;
+    const sortValue = document.getElementById('sortBy').value;
+
+    let filtered = assignments.filter(a => 
+        filterValue === 'all' || a.priority === filterValue
+    );
+
+    if (sortValue === 'date') {
+        filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+    } else {
+        const priorityOrder = { high: 1, medium: 2, low: 3 };
+        filtered.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+    }
+
+    list.innerHTML = filtered.map(assignment => `
+        <div class="assignment-item ${assignment.completed ? 'completed' : ''}">
+            <div class="assignment-info">
+                <div class="assignment-subject">${assignment.subject}</div>
+                <div class="assignment-date">Due: ${new Date(assignment.date).toLocaleDateString()}</div>
+            </div>
+            <span class="priority-badge priority-${assignment.priority}">${assignment.priority}</span>
+            <div class="assignment-actions">
+                <button class="btn-complete" onclick="toggleComplete(${assignment.id})">
+                    ${assignment.completed ? 'Undo' : 'Complete'}
+                </button>
+                <button class="btn-delete" onclick="deleteAssignment(${assignment.id})">Delete</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function toggleComplete(id) {
+    const assignment = assignments.find(a => a.id === id);
+    if (assignment) {
+        assignment.completed = !assignment.completed;
+        saveAssignments();
+        renderAssignments();
+    }
+}
+
+function deleteAssignment(id) {
+    assignments = assignments.filter(a => a.id !== id);
+    saveAssignments();
+    renderAssignments();
+}
+
+function saveAssignments() {
+    localStorage.setItem('assignments', JSON.stringify(assignments));
+}
+
+function loadAssignments() {
+    const saved = localStorage.getItem('assignments');
+    if (saved) {
+        assignments = JSON.parse(saved);
+    }
+}
+
+// Study Timer
+let timerInterval;
+let timeLeft = 25 * 60;
+let isRunning = false;
+let dailyStudyTime = 0;
+
+function initTimer() {
+    const presetBtns = document.querySelectorAll('.preset-btn');
+    const startBtn = document.getElementById('startTimer');
+    const pauseBtn = document.getElementById('pauseTimer');
+    const resetBtn = document.getElementById('resetTimer');
+
+    presetBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const minutes = parseInt(btn.dataset.minutes);
+            timeLeft = minutes * 60;
+            updateTimerDisplay();
+        });
+    });
+
+    startBtn.addEventListener('click', startTimer);
+    pauseBtn.addEventListener('click', pauseTimer);
+    resetBtn.addEventListener('click', resetTimer);
+
+    updateTimerDisplay();
+    updateDailyHours();
+}
+
+function startTimer() {
+    if (!isRunning) {
+        isRunning = true;
+        timerInterval = setInterval(() => {
+            if (timeLeft > 0) {
+                timeLeft--;
+                dailyStudyTime++;
+                updateTimerDisplay();
+                updateDailyHours();
+                saveDailyStudyTime();
+            } else {
+                pauseTimer();
+                alert('Time\'s up! Take a break!');
+            }
+        }, 1000);
+    }
+}
+
+function pauseTimer() {
+    isRunning = false;
+    clearInterval(timerInterval);
+}
+
+function resetTimer() {
+    pauseTimer();
+    timeLeft = 25 * 60;
+    updateTimerDisplay();
+}
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    document.getElementById('timerDisplay').textContent = 
+        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+function updateDailyHours() {
+    const hours = Math.floor(dailyStudyTime / 3600);
+    const minutes = Math.floor((dailyStudyTime % 3600) / 60);
+    document.getElementById('dailyHours').textContent = `${hours}h ${minutes}m`;
+}
+
+function saveDailyStudyTime() {
+    localStorage.setItem('dailyStudyTime', dailyStudyTime.toString());
+    localStorage.setItem('studyDate', new Date().toDateString());
+}
+
+function loadDailyStudyTime() {
+    const savedDate = localStorage.getItem('studyDate');
+    const today = new Date().toDateString();
+    
+    if (savedDate === today) {
+        dailyStudyTime = parseInt(localStorage.getItem('dailyStudyTime') || '0');
+    } else {
+        dailyStudyTime = 0;
+        saveDailyStudyTime();
+    }
+}
+
+// GPA Calculator
+let courses = [];
+
+function initGPA() {
+    const addBtn = document.getElementById('addCourse');
+    addBtn.addEventListener('click', addCourse);
+    renderCourses();
+    calculateGPA();
+}
+
+function addCourse() {
+    const name = document.getElementById('courseName').value;
+    const grade = parseFloat(document.getElementById('courseGrade').value);
+    const units = parseInt(document.getElementById('courseUnits').value);
+
+    if (!name || !units) {
+        alert('Please fill in all fields');
+        return;
+    }
+
+    courses.push({
+        id: Date.now(),
+        name,
+        grade,
+        units
+    });
+
+    saveCourses();
+    renderCourses();
+    calculateGPA();
+
+    document.getElementById('courseName').value = '';
+}
+
+function renderCourses() {
+    const list = document.getElementById('courseList');
+    list.innerHTML = courses.map(course => `
+        <div class="course-item">
+            <div class="course-info">
+                <div class="course-name">${course.name}</div>
+                <div class="course-details">Grade: ${course.grade.toFixed(1)} | Units: ${course.units}</div>
+            </div>
+            <button class="btn-delete" onclick="deleteCourse(${course.id})">Delete</button>
+        </div>
+    `).join('');
+}
+
+function deleteCourse(id) {
+    courses = courses.filter(c => c.id !== id);
+    saveCourses();
+    renderCourses();
+    calculateGPA();
+}
+
+function calculateGPA() {
+    if (courses.length === 0) {
+        document.getElementById('currentGPA').textContent = '0.00';
+        return;
+    }
+
+    let totalPoints = 0;
+    let totalUnits = 0;
+
+    courses.forEach(course => {
+        totalPoints += course.grade * course.units;
+        totalUnits += course.units;
+    });
+
+    const gpa = totalPoints / totalUnits;
+    document.getElementById('currentGPA').textContent = gpa.toFixed(2);
+}
+
+function saveCourses() {
+    localStorage.setItem('courses', JSON.stringify(courses));
+}
+
+function loadCourses() {
+    const saved = localStorage.getItem('courses');
+    if (saved) {
+        courses = JSON.parse(saved);
+    }
+}
+
+// Quick Tools
+function initQuickTools() {
+    updateDate();
+    displayQuote();
+}
+
+function updateDate() {
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const today = new Date().toLocaleDateString('en-US', options);
+    document.getElementById('dateDisplay').textContent = today;
+}
+
+function displayQuote() {
+    const quotes = [
+        "Success is the sum of small efforts repeated day in and day out.",
+        "The expert in anything was once a beginner.",
+        "Education is the passport to the future.",
+        "Learning is a treasure that will follow its owner everywhere.",
+        "The beautiful thing about learning is that no one can take it away from you.",
+        "Study while others are sleeping; work while others are loafing.",
+        "Don't watch the clock; do what it does. Keep going.",
+        "The secret of getting ahead is getting started.",
+        "Your limitation—it's only your imagination.",
+        "Great things never come from comfort zones."
+    ];
+
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    document.getElementById('quoteDisplay').textContent = `"${randomQuote}"`;
+}
+
+// Calculator
+let calcDisplay = document.getElementById('calcDisplay');
+let currentCalc = '';
+let previousCalc = '';
+let operation = null;
+
+function initCalculator() {
+    const calcBtns = document.querySelectorAll('.calc-btn');
+    
+    calcBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const value = btn.dataset.value;
+            handleCalculator(value);
+        });
+    });
+}
+
+function handleCalculator(value) {
+    if (value === 'C') {
+        currentCalc = '';
+        previousCalc = '';
+        operation = null;
+        calcDisplay.value = '';
+        return;
+    }
+
+    if (value === '=') {
+        if (operation && previousCalc && currentCalc) {
+            currentCalc = calculate(previousCalc, currentCalc, operation);
+            calcDisplay.value = currentCalc;
+            previousCalc = '';
+            operation = null;
+        }
+        return;
+    }
+
+    if (['+', '-', '*', '/'].includes(value)) {
+        if (currentCalc) {
+            if (previousCalc && operation) {
+                currentCalc = calculate(previousCalc, currentCalc, operation);
+                calcDisplay.value = currentCalc;
+            }
+            previousCalc = currentCalc;
+            currentCalc = '';
+            operation = value;
+        }
+        return;
+    }
+
+    currentCalc += value;
+    calcDisplay.value = currentCalc;
+}
+
+function calculate(a, b, op) {
+    const num1 = parseFloat(a);
+    const num2 = parseFloat(b);
+
+    switch (op) {
+        case '+': return (num1 + num2).toString();
+        case '-': return (num1 - num2).toString();
+        case '*': return (num1 * num2).toString();
+        case '/': return num2 !== 0 ? (num1 / num2).toString() : 'Error';
+        default: return b;
+    }
+}
+
+// Quick Notes
+function initNotes() {
+    const saveBtn = document.getElementById('saveNotes');
+    const notesArea = document.getElementById('quickNotes');
+
+    saveBtn.addEventListener('click', () => {
+        localStorage.setItem('quickNotes', notesArea.value);
+        alert('Notes saved!');
+    });
+
+    loadNotes();
+}
+
+function loadNotes() {
+    const saved = localStorage.getItem('quickNotes');
+    if (saved) {
+        document.getElementById('quickNotes').value = saved;
+    }
+}
+
+// Load all data
+function loadAllData() {
+    loadAssignments();
+    loadCourses();
+    loadDailyStudyTime();
+    loadNotes();
+}
