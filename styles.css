@@ -20,10 +20,11 @@ body::before {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
     background-size: 50px 50px;
     animation: backgroundMove 20s linear infinite;
     pointer-events: none;
+    opacity: 0.6;
 }
 
 @keyframes backgroundMove {
@@ -45,13 +46,13 @@ body::before {
 }
 
 .login-card {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(20px);
     border-radius: 24px;
     padding: 60px 50px;
-    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3),
-                0 0 0 1px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.15);
     text-align: center;
     min-width: 400px;
     transform: perspective(1000px) rotateX(2deg);
@@ -67,27 +68,28 @@ body::before {
     right: 0;
     bottom: 0;
     border-radius: 24px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 100%);
+    background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 100%);
     pointer-events: none;
 }
 
 .login-card:hover {
     transform: perspective(1000px) rotateX(0deg) translateY(-5px);
-    box-shadow: 0 35px 90px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4),
-                0 0 0 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 35px 90px rgba(0, 0, 0, 0.45),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.25);
 }
 
 .login-card h1 {
     font-size: 2.5em;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(135deg, #4c63d2 0%, #5a3a8f 50%, #d66ee0 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 10px;
-    text-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    font-weight: 700;
     position: relative;
     z-index: 1;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
 }
 
 .subtitle {
@@ -142,7 +144,7 @@ body::before {
 .btn-primary {
     width: 100%;
     padding: 15px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
     border-radius: 12px;
@@ -196,7 +198,7 @@ body::before {
 }
 
 .dashboard-header {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(20px);
     padding: 20px 40px;
     border-radius: 20px;
@@ -204,9 +206,9 @@ body::before {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3),
-                0 0 0 1px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.15);
     transform: translateZ(0);
     position: relative;
 }
@@ -219,19 +221,20 @@ body::before {
     right: 0;
     bottom: 0;
     border-radius: 20px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 100%);
+    background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 100%);
     pointer-events: none;
 }
 
 .dashboard-header h1 {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(135deg, #4c63d2 0%, #5a3a8f 50%, #d66ee0 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     font-size: 2em;
-    text-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    font-weight: 700;
     position: relative;
     z-index: 1;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .btn-logout {
@@ -285,13 +288,13 @@ body::before {
 }
 
 .card {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(20px);
     border-radius: 20px;
     padding: 30px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3),
-                0 0 0 1px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.15);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     transform: translateZ(0);
     position: relative;
@@ -305,27 +308,28 @@ body::before {
     right: 0;
     bottom: 0;
     border-radius: 20px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 100%);
+    background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 100%);
     pointer-events: none;
 }
 
 .card:hover {
     transform: translateY(-5px) translateZ(0);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4),
-                0 0 0 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.25);
 }
 
 .card h2 {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(135deg, #4c63d2 0%, #5a3a8f 50%, #d66ee0 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 20px;
     font-size: 1.5em;
-    text-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    font-weight: 700;
     position: relative;
     z-index: 1;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 /* Assignment Tracker */
@@ -392,7 +396,7 @@ body::before {
 
 .btn-add {
     padding: 16px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
     border-radius: 12px;
@@ -578,14 +582,13 @@ body::before {
     font-size: 4em;
     font-weight: 700;
     text-align: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(135deg, #4c63d2 0%, #5a3a8f 50%, #d66ee0 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin: 30px 0;
     font-family: 'Courier New', monospace;
-    text-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-    filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.3));
+    filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.4));
 }
 
 .timer-presets {
@@ -695,7 +698,7 @@ body::before {
 .gpa-display {
     text-align: center;
     padding: 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border-radius: 16px;
     margin-bottom: 20px;
@@ -803,14 +806,14 @@ body::before {
     text-align: center;
     font-size: 1.3em;
     font-weight: 600;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(135deg, #4c63d2 0%, #5a3a8f 50%, #d66ee0 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 20px;
-    text-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
     position: relative;
     z-index: 1;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .quote-display {
@@ -1010,13 +1013,15 @@ body::before {
 }
 
 .menu-header h1 {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(135deg, #4c63d2 0%, #5a3a8f 50%, #d66ee0 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     font-size: 2em;
+    font-weight: 700;
     position: relative;
     z-index: 1;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .menu-container {
@@ -1031,14 +1036,15 @@ body::before {
 }
 
 .menu-container h2 {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(135deg, #4c63d2 0%, #5a3a8f 50%, #d66ee0 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     font-size: 2.5em;
     margin-bottom: 50px;
     text-align: center;
-    text-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    font-weight: 700;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
 }
 
 .menu-grid {
@@ -1050,16 +1056,16 @@ body::before {
 }
 
 .menu-card {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(20px);
     border-radius: 24px;
     padding: 40px 30px;
     text-align: center;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3),
-                0 0 0 1px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.15);
     position: relative;
     overflow: hidden;
 }
@@ -1072,20 +1078,20 @@ body::before {
     right: 0;
     bottom: 0;
     border-radius: 24px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 100%);
+    background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 100%);
     pointer-events: none;
     transition: opacity 0.4s;
 }
 
 .menu-card:hover::before {
-    opacity: 0.5;
+    opacity: 0.7;
 }
 
 .menu-card:hover {
     transform: translateY(-10px) scale(1.03);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4),
-                0 0 0 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.25);
 }
 
 .menu-card:active {
@@ -1131,8 +1137,8 @@ body::before {
 }
 
 .menu-card[data-feature="all"] {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 50%, rgba(240, 147, 251, 0.3) 100%);
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.35) 0%, rgba(118, 75, 162, 0.35) 50%, rgba(240, 147, 251, 0.35) 100%);
+    border: 2px solid rgba(255, 255, 255, 0.35);
 }
 
 .menu-card[data-feature="all"]:hover {
