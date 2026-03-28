@@ -263,6 +263,7 @@ function initTimer() {
     const volumeControl = document.getElementById('volumeControl');
     const volumeLabel = document.getElementById('volumeLabel');
     const openMusicBtn = document.getElementById('openMusicLink');
+    const musicSelector = document.getElementById('musicSelector');
 
     // Initialize audio
     initAudio();
@@ -282,6 +283,24 @@ function initTimer() {
     resetBtn.addEventListener('click', resetTimer);
 
     musicToggle.addEventListener('change', toggleMusic);
+    
+    musicSelector.addEventListener('change', (e) => {
+        const wasPlaying = backgroundMusic && !backgroundMusic.paused;
+        const currentTime = backgroundMusic ? backgroundMusic.currentTime : 0;
+        
+        // Change the music source
+        if (backgroundMusic) {
+            backgroundMusic.src = e.target.value;
+            backgroundMusic.load();
+            
+            // If music was playing, continue playing the new track
+            if (wasPlaying) {
+                backgroundMusic.play().catch(err => {
+                    console.log('Audio playback failed:', err);
+                });
+            }
+        }
+    });
     
     volumeControl.addEventListener('input', (e) => {
         const volume = e.target.value;
