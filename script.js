@@ -39,17 +39,90 @@ loginForm.addEventListener('submit', (e) => {
 });
 
 // Logout
-logoutBtn.addEventListener('click', () => {
+logoutBtn.addEventListener('click', logout);
+menuLogoutBtn.addEventListener('click', logout);
+
+function logout() {
     localStorage.setItem('isLoggedIn', 'false');
     loginScreen.classList.remove('hidden');
+    mainMenu.classList.add('hidden');
     dashboard.classList.add('hidden');
     document.getElementById('username').value = '';
     document.getElementById('password').value = '';
-});
+}
 
-function showDashboard() {
+function showMainMenu() {
     loginScreen.classList.add('hidden');
+    mainMenu.classList.remove('hidden');
+    dashboard.classList.add('hidden');
+}
+
+function showDashboard(feature = 'all') {
+    loginScreen.classList.add('hidden');
+    mainMenu.classList.add('hidden');
     dashboard.classList.remove('hidden');
+    
+    // Hide all columns first
+    const columns = document.querySelectorAll('.column');
+    columns.forEach(col => col.style.display = 'none');
+    
+    // Show columns based on feature
+    switch(feature) {
+        case 'assignments':
+            dashboardTitle.textContent = '📝 Assignment Tracker';
+            columns[0].style.display = 'flex';
+            break;
+        case 'timer':
+            dashboardTitle.textContent = '⏱️ Focus Timer';
+            columns[1].style.display = 'flex';
+            columns[1].querySelector('.card:first-child').style.display = 'block';
+            columns[1].querySelector('.card:last-child').style.display = 'none';
+            break;
+        case 'gpa':
+            dashboardTitle.textContent = '🎓 GPA Calculator';
+            columns[0].style.display = 'flex';
+            columns[0].querySelector('.card:first-child').style.display = 'none';
+            columns[0].querySelector('.card:last-child').style.display = 'block';
+            break;
+        case 'notes':
+            dashboardTitle.textContent = '📋 Quick Notes';
+            columns[1].style.display = 'flex';
+            columns[1].querySelector('.card:first-child').style.display = 'none';
+            columns[1].querySelector('.card:last-child').style.display = 'block';
+            break;
+        case 'motivation':
+            dashboardTitle.textContent = '🌟 Daily Motivation';
+            columns[2].style.display = 'flex';
+            columns[2].querySelector('.card:first-child').style.display = 'block';
+            columns[2].querySelector('.card:last-child').style.display = 'none';
+            break;
+        case 'calculator':
+            dashboardTitle.textContent = '🔢 Calculator';
+            columns[2].style.display = 'flex';
+            columns[2].querySelector('.card:first-child').style.display = 'none';
+            columns[2].querySelector('.card:last-child').style.display = 'block';
+            break;
+        case 'all':
+        default:
+            dashboardTitle.textContent = '📚 Study Dashboard';
+            columns.forEach(col => col.style.display = 'flex');
+            columns.forEach(col => {
+                col.querySelectorAll('.card').forEach(card => card.style.display = 'block');
+            });
+            break;
+    }
+}
+
+// Menu Navigation
+function initMenuNavigation() {
+    menuCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const feature = card.dataset.feature;
+            showDashboard(feature);
+        });
+    });
+    
+    backToMenuBtn.addEventListener('click', showMainMenu);
 }
 
 // Initialize App
