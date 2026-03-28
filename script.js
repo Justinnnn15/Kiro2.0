@@ -373,11 +373,14 @@ function setCustomTime() {
 function toggleMusic(e) {
     if (!backgroundMusic) return;
     
-    if (e.target.checked && isRunning) {
+    if (e.target.checked) {
+        // Play music when checkbox is checked
         backgroundMusic.play().catch(err => {
             console.log('Audio playback failed:', err);
+            alert('Could not play music. Please make sure the audio file exists in the music folder.');
         });
     } else {
+        // Pause music when checkbox is unchecked
         backgroundMusic.pause();
     }
 }
@@ -413,10 +416,7 @@ function pauseTimer() {
     isRunning = false;
     clearInterval(timerInterval);
     
-    // Pause music
-    if (backgroundMusic) {
-        backgroundMusic.pause();
-    }
+    // Don't pause music automatically - let user control it with checkbox
 }
 
 function resetTimer() {
@@ -426,6 +426,18 @@ function resetTimer() {
 }
 
 function timerComplete() {
+    // Stop background music
+    if (backgroundMusic) {
+        backgroundMusic.pause();
+        backgroundMusic.currentTime = 0; // Reset to beginning
+    }
+    
+    // Uncheck the music toggle
+    const musicToggle = document.getElementById('musicToggle');
+    if (musicToggle) {
+        musicToggle.checked = false;
+    }
+    
     // Play alarm sound
     if (alarmSound) {
         alarmSound.play();
