@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
     min-height: 100vh;
     min-width: 1024px;
     position: relative;
@@ -20,16 +20,17 @@ body::before {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
-    background-size: 50px 50px;
-    animation: backgroundMove 20s linear infinite;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(72, 219, 251, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(255, 119, 255, 0.08) 0%, transparent 50%);
+    animation: backgroundMove 20s ease-in-out infinite;
     pointer-events: none;
-    opacity: 0.6;
 }
 
 @keyframes backgroundMove {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(50px, 50px); }
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(50px, 50px) scale(1.1); }
 }
 
 .hidden {
@@ -46,13 +47,13 @@ body::before {
 }
 
 .login-card {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(30, 30, 46, 0.8);
     backdrop-filter: blur(20px);
     border-radius: 24px;
     padding: 60px 50px;
-    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4),
-                0 0 0 1px rgba(255, 255, 255, 0.15);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(120, 119, 198, 0.3),
+                0 0 0 1px rgba(120, 119, 198, 0.2);
     text-align: center;
     min-width: 400px;
     transform: perspective(1000px) rotateX(2deg);
@@ -68,20 +69,21 @@ body::before {
     right: 0;
     bottom: 0;
     border-radius: 24px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 100%);
+    background: linear-gradient(135deg, rgba(120, 119, 198, 0.15) 0%, rgba(72, 219, 251, 0.1) 100%);
     pointer-events: none;
 }
 
 .login-card:hover {
     transform: perspective(1000px) rotateX(0deg) translateY(-5px);
-    box-shadow: 0 35px 90px rgba(0, 0, 0, 0.45),
-                inset 0 1px 0 rgba(255, 255, 255, 0.5),
-                0 0 0 1px rgba(255, 255, 255, 0.25);
+    box-shadow: 0 35px 90px rgba(0, 0, 0, 0.7),
+                inset 0 1px 0 rgba(120, 119, 198, 0.4),
+                0 0 0 1px rgba(72, 219, 251, 0.3),
+                0 0 40px rgba(72, 219, 251, 0.15);
 }
 
 .login-card h1 {
     font-size: 2.5em;
-    background: linear-gradient(135deg, #4c63d2 0%, #5a3a8f 50%, #d66ee0 100%);
+    background: linear-gradient(135deg, #7877c6 0%, #48dbfb 50%, #ff77ff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -89,14 +91,14 @@ body::before {
     font-weight: 700;
     position: relative;
     z-index: 1;
-    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(0 4px 12px rgba(72, 219, 251, 0.4));
 }
 
 .subtitle {
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(200, 200, 220, 0.9);
     margin-bottom: 40px;
     font-size: 1.1em;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     position: relative;
     z-index: 1;
 }
@@ -108,29 +110,29 @@ body::before {
 .input-group input {
     width: 100%;
     padding: 15px 20px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(120, 119, 198, 0.3);
     border-radius: 12px;
     font-size: 1em;
     transition: all 0.3s;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(20, 20, 35, 0.6);
     backdrop-filter: blur(10px);
-    color: white;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    color: #e0e0e0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(120, 119, 198, 0.1);
     position: relative;
     z-index: 1;
 }
 
 .input-group input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(200, 200, 220, 0.5);
 }
 
 .input-group input:focus {
     outline: none;
-    border-color: rgba(255, 255, 255, 0.4);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3),
-                0 0 0 1px rgba(255, 255, 255, 0.2);
+    border-color: rgba(72, 219, 251, 0.6);
+    box-shadow: 0 8px 25px rgba(72, 219, 251, 0.3),
+                inset 0 1px 0 rgba(120, 119, 198, 0.2),
+                0 0 20px rgba(72, 219, 251, 0.2);
     transform: translateY(-2px);
 }
 
@@ -144,7 +146,7 @@ body::before {
 .btn-primary {
     width: 100%;
     padding: 15px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #7877c6 0%, #48dbfb 100%);
     color: white;
     border: none;
     border-radius: 12px;
@@ -152,8 +154,8 @@ body::before {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 20px rgba(72, 219, 251, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
     position: relative;
     overflow: hidden;
     z-index: 1;
@@ -176,8 +178,9 @@ body::before {
 
 .btn-primary:hover {
     transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.6),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    box-shadow: 0 15px 35px rgba(72, 219, 251, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                0 0 30px rgba(72, 219, 251, 0.3);
 }
 
 .btn-primary:active {
@@ -198,7 +201,7 @@ body::before {
 }
 
 .dashboard-header {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(30, 30, 46, 0.7);
     backdrop-filter: blur(20px);
     padding: 20px 40px;
     border-radius: 20px;
@@ -206,9 +209,9 @@ body::before {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4),
-                0 0 0 1px rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(120, 119, 198, 0.2),
+                0 0 0 1px rgba(120, 119, 198, 0.1);
     transform: translateZ(0);
     position: relative;
 }
@@ -221,12 +224,12 @@ body::before {
     right: 0;
     bottom: 0;
     border-radius: 20px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 100%);
+    background: linear-gradient(135deg, rgba(120, 119, 198, 0.1) 0%, rgba(72, 219, 251, 0.05) 100%);
     pointer-events: none;
 }
 
 .dashboard-header h1 {
-    background: linear-gradient(135deg, #4c63d2 0%, #5a3a8f 50%, #d66ee0 100%);
+    background: linear-gradient(135deg, #7877c6 0%, #48dbfb 50%, #ff77ff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -234,7 +237,7 @@ body::before {
     font-weight: 700;
     position: relative;
     z-index: 1;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(0 2px 8px rgba(72, 219, 251, 0.3));
 }
 
 .btn-logout {
@@ -288,13 +291,13 @@ body::before {
 }
 
 .card {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(30, 30, 46, 0.7);
     backdrop-filter: blur(20px);
     border-radius: 20px;
     padding: 30px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4),
-                0 0 0 1px rgba(255, 255, 255, 0.15);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(120, 119, 198, 0.2),
+                0 0 0 1px rgba(120, 119, 198, 0.1);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     transform: translateZ(0);
     position: relative;
@@ -308,19 +311,20 @@ body::before {
     right: 0;
     bottom: 0;
     border-radius: 20px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 100%);
+    background: linear-gradient(135deg, rgba(120, 119, 198, 0.1) 0%, rgba(72, 219, 251, 0.05) 100%);
     pointer-events: none;
 }
 
 .card:hover {
     transform: translateY(-5px) translateZ(0);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35),
-                inset 0 1px 0 rgba(255, 255, 255, 0.5),
-                0 0 0 1px rgba(255, 255, 255, 0.25);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(120, 119, 198, 0.3),
+                0 0 0 1px rgba(72, 219, 251, 0.3),
+                0 0 30px rgba(72, 219, 251, 0.1);
 }
 
 .card h2 {
-    background: linear-gradient(135deg, #4c63d2 0%, #5a3a8f 50%, #d66ee0 100%);
+    background: linear-gradient(135deg, #7877c6 0%, #48dbfb 50%, #ff77ff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -329,7 +333,7 @@ body::before {
     font-weight: 700;
     position: relative;
     z-index: 1;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(0 2px 8px rgba(72, 219, 251, 0.3));
 }
 
 /* Assignment Tracker */
@@ -396,7 +400,7 @@ body::before {
 
 .btn-add {
     padding: 16px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #7877c6 0%, #48dbfb 100%);
     color: white;
     border: none;
     border-radius: 12px;
@@ -404,16 +408,17 @@ body::before {
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 20px rgba(72, 219, 251, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
 .btn-add:hover {
     transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 12px 30px rgba(102, 126, 234, 0.7),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    box-shadow: 0 12px 30px rgba(72, 219, 251, 0.7),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                0 0 30px rgba(72, 219, 251, 0.3);
 }
 
 .btn-add:active {
@@ -582,13 +587,13 @@ body::before {
     font-size: 4em;
     font-weight: 700;
     text-align: center;
-    background: linear-gradient(135deg, #4c63d2 0%, #5a3a8f 50%, #d66ee0 100%);
+    background: linear-gradient(135deg, #7877c6 0%, #48dbfb 50%, #ff77ff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin: 30px 0;
     font-family: 'Courier New', monospace;
-    filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.4));
+    filter: drop-shadow(0 4px 12px rgba(72, 219, 251, 0.5));
 }
 
 .timer-presets {
@@ -698,12 +703,13 @@ body::before {
 .gpa-display {
     text-align: center;
     padding: 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #7877c6 0%, #48dbfb 100%);
     color: white;
     border-radius: 16px;
     margin-bottom: 20px;
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 25px rgba(72, 219, 251, 0.5),
+                inset 0 2px 0 rgba(255, 255, 255, 0.2),
+                0 0 30px rgba(72, 219, 251, 0.2);
     position: relative;
     overflow: hidden;
 }
@@ -715,7 +721,7 @@ body::before {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
     animation: gpaGlow 3s ease-in-out infinite;
 }
 
@@ -806,14 +812,14 @@ body::before {
     text-align: center;
     font-size: 1.3em;
     font-weight: 600;
-    background: linear-gradient(135deg, #4c63d2 0%, #5a3a8f 50%, #d66ee0 100%);
+    background: linear-gradient(135deg, #7877c6 0%, #48dbfb 50%, #ff77ff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 20px;
     position: relative;
     z-index: 1;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(0 2px 8px rgba(72, 219, 251, 0.3));
 }
 
 .quote-display {
@@ -962,9 +968,9 @@ body::before {
 
 .hint {
     margin-top: 20px;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(200, 200, 220, 0.6);
     font-size: 0.9em;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     position: relative;
     z-index: 1;
 }
@@ -1013,7 +1019,7 @@ body::before {
 }
 
 .menu-header h1 {
-    background: linear-gradient(135deg, #4c63d2 0%, #5a3a8f 50%, #d66ee0 100%);
+    background: linear-gradient(135deg, #7877c6 0%, #48dbfb 50%, #ff77ff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -1021,7 +1027,7 @@ body::before {
     font-weight: 700;
     position: relative;
     z-index: 1;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(0 2px 8px rgba(72, 219, 251, 0.3));
 }
 
 .menu-container {
@@ -1036,7 +1042,7 @@ body::before {
 }
 
 .menu-container h2 {
-    background: linear-gradient(135deg, #4c63d2 0%, #5a3a8f 50%, #d66ee0 100%);
+    background: linear-gradient(135deg, #7877c6 0%, #48dbfb 50%, #ff77ff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -1044,7 +1050,7 @@ body::before {
     margin-bottom: 50px;
     text-align: center;
     font-weight: 700;
-    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(0 4px 12px rgba(72, 219, 251, 0.4));
 }
 
 .menu-grid {
@@ -1056,16 +1062,16 @@ body::before {
 }
 
 .menu-card {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(30, 30, 46, 0.7);
     backdrop-filter: blur(20px);
     border-radius: 24px;
     padding: 40px 30px;
     text-align: center;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4),
-                0 0 0 1px rgba(255, 255, 255, 0.15);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(120, 119, 198, 0.2),
+                0 0 0 1px rgba(120, 119, 198, 0.1);
     position: relative;
     overflow: hidden;
 }
@@ -1078,20 +1084,21 @@ body::before {
     right: 0;
     bottom: 0;
     border-radius: 24px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 100%);
+    background: linear-gradient(135deg, rgba(120, 119, 198, 0.1) 0%, rgba(72, 219, 251, 0.05) 100%);
     pointer-events: none;
     transition: opacity 0.4s;
 }
 
 .menu-card:hover::before {
-    opacity: 0.7;
+    opacity: 1.5;
 }
 
 .menu-card:hover {
     transform: translateY(-10px) scale(1.03);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35),
-                inset 0 1px 0 rgba(255, 255, 255, 0.5),
-                0 0 0 1px rgba(255, 255, 255, 0.25);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(120, 119, 198, 0.3),
+                0 0 0 1px rgba(72, 219, 251, 0.3),
+                0 0 40px rgba(72, 219, 251, 0.15);
 }
 
 .menu-card:active {
@@ -1119,30 +1126,34 @@ body::before {
 .menu-card:nth-child(7) .menu-icon { animation-delay: 1.2s; }
 
 .menu-card h3 {
-    color: white;
+    color: #e0e0e0;
     font-size: 1.5em;
     margin-bottom: 10px;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
     position: relative;
     z-index: 1;
 }
 
 .menu-card p {
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(200, 200, 220, 0.8);
     font-size: 1em;
     line-height: 1.5;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     position: relative;
     z-index: 1;
 }
 
 .menu-card[data-feature="all"] {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.35) 0%, rgba(118, 75, 162, 0.35) 50%, rgba(240, 147, 251, 0.35) 100%);
-    border: 2px solid rgba(255, 255, 255, 0.35);
+    background: linear-gradient(135deg, rgba(120, 119, 198, 0.3) 0%, rgba(72, 219, 251, 0.25) 50%, rgba(255, 119, 255, 0.25) 100%);
+    border: 2px solid rgba(72, 219, 251, 0.4);
 }
 
 .menu-card[data-feature="all"]:hover {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.5) 0%, rgba(118, 75, 162, 0.5) 50%, rgba(240, 147, 251, 0.5) 100%);
+    background: linear-gradient(135deg, rgba(120, 119, 198, 0.5) 0%, rgba(72, 219, 251, 0.4) 50%, rgba(255, 119, 255, 0.4) 100%);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(120, 119, 198, 0.4),
+                0 0 0 1px rgba(72, 219, 251, 0.5),
+                0 0 50px rgba(72, 219, 251, 0.2);
 }
 
 .btn-back {
