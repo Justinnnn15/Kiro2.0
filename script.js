@@ -62,54 +62,61 @@ function showDashboard(feature = 'all') {
     mainMenu.classList.add('hidden');
     dashboard.classList.remove('hidden');
     
-    // Hide all columns first
+    const dashboardGrid = document.querySelector('.dashboard-grid');
     const columns = document.querySelectorAll('.column');
+    
+    // Hide all columns first
     columns.forEach(col => col.style.display = 'none');
     
     // Show columns based on feature
-    switch(feature) {
-        case 'assignments':
-            dashboardTitle.textContent = '📝 Assignment Tracker';
-            columns[0].style.display = 'flex';
-            break;
-        case 'timer':
-            dashboardTitle.textContent = '⏱️ Focus Timer';
-            columns[1].style.display = 'flex';
-            columns[1].querySelector('.card:first-child').style.display = 'block';
-            columns[1].querySelector('.card:last-child').style.display = 'none';
-            break;
-        case 'gpa':
-            dashboardTitle.textContent = '🎓 GPA Calculator';
-            columns[0].style.display = 'flex';
-            columns[0].querySelector('.card:first-child').style.display = 'none';
-            columns[0].querySelector('.card:last-child').style.display = 'block';
-            break;
-        case 'notes':
-            dashboardTitle.textContent = '📋 Quick Notes';
-            columns[1].style.display = 'flex';
-            columns[1].querySelector('.card:first-child').style.display = 'none';
-            columns[1].querySelector('.card:last-child').style.display = 'block';
-            break;
-        case 'motivation':
-            dashboardTitle.textContent = '🌟 Daily Motivation';
-            columns[2].style.display = 'flex';
-            columns[2].querySelector('.card:first-child').style.display = 'block';
-            columns[2].querySelector('.card:last-child').style.display = 'none';
-            break;
-        case 'calculator':
-            dashboardTitle.textContent = '🔢 Calculator';
-            columns[2].style.display = 'flex';
-            columns[2].querySelector('.card:first-child').style.display = 'none';
-            columns[2].querySelector('.card:last-child').style.display = 'block';
-            break;
-        case 'all':
-        default:
-            dashboardTitle.textContent = '📚 Study Dashboard';
-            columns.forEach(col => col.style.display = 'flex');
-            columns.forEach(col => {
-                col.querySelectorAll('.card').forEach(card => card.style.display = 'block');
-            });
-            break;
+    if (feature === 'all') {
+        dashboardTitle.textContent = '📚 Study Dashboard';
+        dashboardGrid.classList.remove('centered');
+        columns.forEach(col => {
+            col.style.display = 'flex';
+            col.querySelectorAll('.card').forEach(card => card.style.display = 'block');
+        });
+    } else {
+        dashboardGrid.classList.add('centered');
+        
+        switch(feature) {
+            case 'assignments':
+                dashboardTitle.textContent = '📝 Assignment Tracker';
+                columns[0].style.display = 'flex';
+                columns[0].querySelector('.card:first-child').style.display = 'block';
+                columns[0].querySelector('.card:last-child').style.display = 'none';
+                break;
+            case 'timer':
+                dashboardTitle.textContent = '⏱️ Focus Timer';
+                columns[1].style.display = 'flex';
+                columns[1].querySelector('.card:first-child').style.display = 'block';
+                columns[1].querySelector('.card:last-child').style.display = 'none';
+                break;
+            case 'gpa':
+                dashboardTitle.textContent = '🎓 GPA Calculator';
+                columns[0].style.display = 'flex';
+                columns[0].querySelector('.card:first-child').style.display = 'none';
+                columns[0].querySelector('.card:last-child').style.display = 'block';
+                break;
+            case 'notes':
+                dashboardTitle.textContent = '📋 Quick Notes';
+                columns[1].style.display = 'flex';
+                columns[1].querySelector('.card:first-child').style.display = 'none';
+                columns[1].querySelector('.card:last-child').style.display = 'block';
+                break;
+            case 'motivation':
+                dashboardTitle.textContent = '🌟 Daily Motivation';
+                columns[2].style.display = 'flex';
+                columns[2].querySelector('.card:first-child').style.display = 'block';
+                columns[2].querySelector('.card:last-child').style.display = 'none';
+                break;
+            case 'calculator':
+                dashboardTitle.textContent = '🔢 Calculator';
+                columns[2].style.display = 'flex';
+                columns[2].querySelector('.card:first-child').style.display = 'none';
+                columns[2].querySelector('.card:last-child').style.display = 'block';
+                break;
+        }
     }
 }
 
@@ -152,17 +159,19 @@ function initAssignments() {
 
 function addAssignment() {
     const subject = document.getElementById('assignmentSubject').value;
+    const description = document.getElementById('assignmentDescription').value;
     const date = document.getElementById('assignmentDate').value;
     const priority = document.getElementById('assignmentPriority').value;
 
     if (!subject || !date) {
-        alert('Please fill in all fields');
+        alert('Please fill in subject and date fields');
         return;
     }
 
     assignments.push({
         id: Date.now(),
         subject,
+        description,
         date,
         priority,
         completed: false
@@ -172,6 +181,7 @@ function addAssignment() {
     renderAssignments();
 
     document.getElementById('assignmentSubject').value = '';
+    document.getElementById('assignmentDescription').value = '';
     document.getElementById('assignmentDate').value = '';
 }
 
@@ -195,6 +205,7 @@ function renderAssignments() {
         <div class="assignment-item ${assignment.completed ? 'completed' : ''}">
             <div class="assignment-info">
                 <div class="assignment-subject">${assignment.subject}</div>
+                ${assignment.description ? `<div class="assignment-description">${assignment.description}</div>` : ''}
                 <div class="assignment-date">Due: ${new Date(assignment.date).toLocaleDateString()}</div>
             </div>
             <span class="priority-badge priority-${assignment.priority}">${assignment.priority}</span>
@@ -239,12 +250,21 @@ let timerInterval;
 let timeLeft = 25 * 60;
 let isRunning = false;
 let dailyStudyTime = 0;
+let backgroundMusic = null;
+let alarmSound = null;
 
 function initTimer() {
     const presetBtns = document.querySelectorAll('.preset-btn');
     const startBtn = document.getElementById('startTimer');
     const pauseBtn = document.getElementById('pauseTimer');
     const resetBtn = document.getElementById('resetTimer');
+    const customTimeBtn = document.getElementById('setCustomTime');
+    const musicToggle = document.getElementById('musicToggle');
+    const volumeControl = document.getElementById('volumeControl');
+    const volumeLabel = document.getElementById('volumeLabel');
+
+    // Initialize audio
+    initAudio();
 
     presetBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -254,17 +274,217 @@ function initTimer() {
         });
     });
 
+    customTimeBtn.addEventListener('click', setCustomTime);
+    
     startBtn.addEventListener('click', startTimer);
     pauseBtn.addEventListener('click', pauseTimer);
     resetBtn.addEventListener('click', resetTimer);
 
+    musicToggle.addEventListener('change', toggleMusic);
+    volumeControl.addEventListener('input', (e) => {
+        const volume = e.target.value;
+        volumeLabel.textContent = volume + '%';
+        if (backgroundMusic) {
+            backgroundMusic.volume = volume / 100;
+        }
+    });
+
     updateTimerDisplay();
     updateDailyHours();
+    
+    // Request notification permission
+    if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission();
+    }
+}
+
+function initAudio() {
+    // Create calming background music using Web Audio API
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (AudioContext) {
+        const audioContext = new AudioContext();
+        
+        backgroundMusic = {
+            context: audioContext,
+            oscillators: [],
+            gainNodes: [],
+            masterGain: null,
+            isPlaying: false,
+            _volume: 0.5,
+            
+            play: function() {
+                if (this.isPlaying) return;
+                
+                // Resume audio context if suspended
+                if (this.context.state === 'suspended') {
+                    this.context.resume();
+                }
+                
+                // Create master gain for volume control
+                this.masterGain = this.context.createGain();
+                this.masterGain.gain.setValueAtTime(this._volume * 0.15, this.context.currentTime);
+                this.masterGain.connect(this.context.destination);
+                
+                // Create multiple oscillators for a rich, calming ambient sound
+                const frequencies = [
+                    { freq: 174, detune: 0 },    // Root note (low)
+                    { freq: 261.63, detune: 0 }, // C note (middle)
+                    { freq: 329.63, detune: 2 }, // E note (harmony)
+                    { freq: 392, detune: -2 }    // G note (harmony)
+                ];
+                
+                frequencies.forEach((note, index) => {
+                    const oscillator = this.context.createOscillator();
+                    const gainNode = this.context.createGain();
+                    
+                    // Use sine wave for smooth, calming tone
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(note.freq, this.context.currentTime);
+                    oscillator.detune.setValueAtTime(note.detune, this.context.currentTime);
+                    
+                    // Set individual volumes for each note
+                    const volumes = [0.3, 0.5, 0.4, 0.35];
+                    gainNode.gain.setValueAtTime(volumes[index], this.context.currentTime);
+                    
+                    // Add subtle LFO (Low Frequency Oscillator) for gentle modulation
+                    const lfo = this.context.createOscillator();
+                    const lfoGain = this.context.createGain();
+                    lfo.frequency.setValueAtTime(0.2 + (index * 0.1), this.context.currentTime);
+                    lfoGain.gain.setValueAtTime(1.5, this.context.currentTime);
+                    
+                    lfo.connect(lfoGain);
+                    lfoGain.connect(oscillator.frequency);
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.masterGain);
+                    
+                    oscillator.start();
+                    lfo.start();
+                    
+                    this.oscillators.push(oscillator);
+                    this.oscillators.push(lfo);
+                    this.gainNodes.push(gainNode);
+                });
+                
+                this.isPlaying = true;
+            },
+            
+            stop: function() {
+                if (!this.isPlaying) return;
+                
+                this.oscillators.forEach(osc => {
+                    try {
+                        osc.stop();
+                        osc.disconnect();
+                    } catch (e) {
+                        // Ignore errors if already stopped
+                    }
+                });
+                
+                this.gainNodes.forEach(gain => {
+                    try {
+                        gain.disconnect();
+                    } catch (e) {
+                        // Ignore errors
+                    }
+                });
+                
+                if (this.masterGain) {
+                    try {
+                        this.masterGain.disconnect();
+                    } catch (e) {
+                        // Ignore errors
+                    }
+                }
+                
+                this.oscillators = [];
+                this.gainNodes = [];
+                this.masterGain = null;
+                this.isPlaying = false;
+            },
+            
+            set volume(val) {
+                this._volume = val;
+                if (this.masterGain) {
+                    this.masterGain.gain.setValueAtTime(val * 0.15, this.context.currentTime);
+                }
+            },
+            
+            get volume() {
+                return this._volume;
+            }
+        };
+    }
+    
+    // Create alarm sound using Web Audio API
+    alarmSound = {
+        play: function() {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            const context = new AudioContext();
+            
+            // Create a pleasant chime notification sound
+            const playTone = (freq, startTime, duration) => {
+                const oscillator = context.createOscillator();
+                const gainNode = context.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(context.destination);
+                
+                oscillator.frequency.setValueAtTime(freq, startTime);
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0, startTime);
+                gainNode.gain.linearRampToValueAtTime(0.3, startTime + 0.01);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+                
+                oscillator.start(startTime);
+                oscillator.stop(startTime + duration);
+            };
+            
+            // Play a pleasant three-tone chime
+            const now = context.currentTime;
+            playTone(523.25, now, 0.4);        // C5
+            playTone(659.25, now + 0.15, 0.4); // E5
+            playTone(783.99, now + 0.3, 0.6);  // G5
+        }
+    };
+}
+
+function setCustomTime() {
+    const customMinutes = parseInt(document.getElementById('customMinutes').value);
+    
+    if (!customMinutes || customMinutes < 1 || customMinutes > 180) {
+        alert('Please enter a valid time between 1 and 180 minutes');
+        return;
+    }
+    
+    timeLeft = customMinutes * 60;
+    updateTimerDisplay();
+    document.getElementById('customMinutes').value = '';
+}
+
+function toggleMusic(e) {
+    if (e.target.checked && isRunning) {
+        if (backgroundMusic) {
+            backgroundMusic.play();
+        }
+    } else {
+        if (backgroundMusic) {
+            backgroundMusic.stop();
+        }
+    }
 }
 
 function startTimer() {
     if (!isRunning) {
         isRunning = true;
+        
+        // Start music if toggle is on
+        const musicToggle = document.getElementById('musicToggle');
+        if (musicToggle.checked && backgroundMusic) {
+            backgroundMusic.play();
+        }
+        
         timerInterval = setInterval(() => {
             if (timeLeft > 0) {
                 timeLeft--;
@@ -274,7 +494,7 @@ function startTimer() {
                 saveDailyStudyTime();
             } else {
                 pauseTimer();
-                alert('Time\'s up! Take a break!');
+                timerComplete();
             }
         }, 1000);
     }
@@ -283,12 +503,40 @@ function startTimer() {
 function pauseTimer() {
     isRunning = false;
     clearInterval(timerInterval);
+    
+    // Stop music
+    if (backgroundMusic) {
+        backgroundMusic.stop();
+    }
 }
 
 function resetTimer() {
     pauseTimer();
     timeLeft = 25 * 60;
     updateTimerDisplay();
+}
+
+function timerComplete() {
+    // Play alarm sound
+    if (alarmSound) {
+        alarmSound.play();
+    }
+    
+    // Show browser notification
+    if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification('Focus Timer Complete! 🎉', {
+            body: 'Great job! Time to take a break.',
+            icon: '⏱️',
+            badge: '⏱️',
+            tag: 'timer-complete',
+            requireInteraction: false
+        });
+    }
+    
+    // Show alert as fallback
+    setTimeout(() => {
+        alert('Time\'s up! 🎉\n\nGreat job! Take a break.');
+    }, 100);
 }
 
 function updateTimerDisplay() {
